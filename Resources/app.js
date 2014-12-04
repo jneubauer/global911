@@ -56,6 +56,7 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 	var found = null;
 	for (var i = 0; i < geodata.length; i++) {//country
 		if (geodata[i].geometry.type = "Polygon") {//if country is single polygon
+			var intersects = 0;
 			for (var j = 0; j < geodata[i].geometry.coordinates[0].length; j++){//looping through the vertices
 				//setting up the specific points we're going to test
 				var x1, x2, x3, x4, y1, y2, y3, y4;
@@ -77,15 +78,74 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 					y3 = geodata[i].geometry.coordinates[0][j][0];
 					y4 = geodata[i].geometry.coordinates[0][j+1][0];
 				}
-				//the test for the line segment we're looking at right now
-				
+				//testing the line segment
+				var intersect = function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
+ 
+				    var s1_x, s1_y, s2_x, s2_y;
+				    s1_x = x2 - x1;
+				    s1_y = y2 - y1;
+				    s2_x = x4 - x3;
+				    s2_y = y4 - y3;
+				 
+				    var s, t;
+				    s = (-s1_y * (x1 - x3) + s1_x * (y1 - y3)) / (-s2_x * s1_y + s1_x * s2_y);
+				    t = ( s2_x * (y1 - y3) - s2_y * (x1 - x3)) / (-s2_x * s1_y + s1_x * s2_y);
+				 
+				    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) return 1;
+				 
+				    return 0; // No collision
+				};
+				if (intersect = 1) intersects++;
 			}
+			if (intersects%2 !=0) found = i;
+			if (found != null) break;//break loop if we've assigned an id to found
 		}
 		else if (geodata[i].geometry.type = "MultiPolygon") {//if country is multiple polygons
 			var mp = geodata[i].geometry.coordinates.length;
 			for (var k = 0; k < mp; k++) {//looping through the polygons
-				
-				if (intersect%2 != 0) found = i;
+				var intersects = 0;
+				for (var j = 0; j < geodata[i].geometry.coordinates[k][0].length; j++){//looping through the vertices
+					//setting up the specific points we're going to test
+					var x1, x2, x3, x4, y1, y2, y3, y4;
+					x1 = pole[0];
+					x2 = latitude;
+					if (j = geodata[i].geometry.coordinates[k][0].length) {
+						x3 = geodata[i].geometry.coordinates[k][0][j][1];
+						x4 = geodata[i].geometry.coordinates[k][0][0][1];
+					} else {
+						x3 = geodata[i].geometry.coordinates[k][0][j][1];
+						x4 = geodata[i].geometry.coordinates[k][0][j+1][1];
+					}
+					y1 = pole[1];
+					y2 = longitude;
+					if (j = geodata[i].geometry.coordinates[k][0].length) {
+						y3 = geodata[i].geometry.coordinates[k][0][j][0];
+						y4 = geodata[i].geometry.coordinates[k][0][0][0];
+					} else {
+						y3 = geodata[i].geometry.coordinates[k][0][j][0];
+						y4 = geodata[i].geometry.coordinates[k][0][j+1][0];
+					}
+					//testing the line segment
+					var intersect = function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
+	 
+					    var s1_x, s1_y, s2_x, s2_y;
+					    s1_x = x2 - x1;
+					    s1_y = y2 - y1;
+					    s2_x = x4 - x3;
+					    s2_y = y4 - y3;
+					 
+					    var s, t;
+					    s = (-s1_y * (x1 - x3) + s1_x * (y1 - y3)) / (-s2_x * s1_y + s1_x * s2_y);
+					    t = ( s2_x * (y1 - y3) - s2_y * (x1 - x3)) / (-s2_x * s1_y + s1_x * s2_y);
+					 
+					    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) return 1;
+					 
+					    return 0; // No collision
+					};
+					if (intersect = 1) intersects++;
+				}
+				if (intersects%2 !=0) found = i;
+				if (found != null) break;//break loop if we've assigned an id to found
 			}
 		}
 		if (found != null) break;//break loop if we've assigned an id to found
