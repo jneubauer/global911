@@ -51,93 +51,44 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 		font:{fontSize:18}
 	});
 	win.add(offlineLabel);
+	//gonna do a science and use the Jordan Curve Theorem here, you might want to shield your eyes
 	var pole = [90,0000,0.0000];//using the North Pole as the other end of the test segment. Sorry, Santa
 	var found = null;
-	//gonna do a science and use the Jordan Curve Theorem here, you might want to shield your eyes
-	while (found = null) {//when the correct country is found, the geodata key will be stored in found, so we can stop searching
-		var i = 0; //counting through main geodata array (countries)
-		if (geodata[i].geometry.type === "Polygon"){//testing cases where the country is a single contiguous polygon
-			var intersect = 0; //number of times a segment consisting of the user & the North Pole intersects with a segment consisting of two adjacent country vertices
-			var vertices = geodata[i].geometry.coordinates.length; //grabbing the number of vertices a country has
-			var j; //counting through coordinates array for current country
-			for (j = 0; j < vertices; j++) {
-				//boring stuff to separate out the latitudes and longitudes that we're gonna test this time around
-				if ((j+1) = vertices){//if the vertice we're testing is the same number in the list as the total amount of vertices, then it's the last one and we have to compare against the first vertice in the list
-					var vert1 = geodata[i].geometry.coordinates[j];//taking the last vertices
-					var vert2 = geodata[i].geometry.coordinates[0];//taking the first vertices
+	for (var i = 0; i < geodata.length; i++) {//country
+		if (geodata[i].geometry.type = "Polygon") {//if country is single polygon
+			for (var j = 0; j < geodata[i].geometry.coordinates[0].length; j++){//looping through the vertices
+				//setting up the specific points we're going to test
+				var x1, x2, x3, x4, y1, y2, y3, y4;
+				x1 = pole[0];
+				x2 = latitude;
+				if (j = geodata[i].geometry.coordinates[0].length) {
+					x3 = geodata[i].geometry.coordinates[0][j][1];
+					x4 = geodata[i].geometry.coordinates[0][0][1];
+				} else {
+					x3 = geodata[i].geometry.coordinates[0][j][1];
+					x4 = geodata[i].geometry.coordinates[0][j+1][1];
 				}
-				else {
-					var vert1 = geodata[i].geometry.coordinates[j];
-					var vert2 = geodata[i].geometry.coordinates[j+1];
+				y1 = pole[1];
+				y2 = longitude;
+				if (j = geodata[i].geometry.coordinates[0].length) {
+					y3 = geodata[i].geometry.coordinates[0][j][0];
+					y4 = geodata[i].geometry.coordinates[0][0][0];
+				} else {
+					y3 = geodata[i].geometry.coordinates[0][j][0];
+					y4 = geodata[i].geometry.coordinates[0][j+1][0];
 				}
-				var res = vert1.split();
-				var res1 = vert2.split();
-				var lat, lon;//variables to hold the two latitudes and longitudes for the test vertices
-				lat.push(res[1]);
-				lat.push(res1[1]);
-				lon.push(res[0]);
-				lon.push(res1[0]);
-				//finally, we can get to testing the specific segment formed by the vertices we're looking at right now
-				if ((lon[0] < longitude && longitude < lon[1]) || (lon[0] > longitude && longitude >  lon[1])) {
-					var t = (longitude - lon[1]) / (lon[0] - lon[1]);
-					var cy = t * lat[0] + (1-t) * lat[1];
-					if (latitude == cy) found = i;//point is on border
-					else if (latitude > cy) intersect++;
-				}
-				if (lon[0] == longitude && lat[0] <= latitude) {
-					if (lat[0] == latitude) found = i;//point is on border
-					if (lon[1] == longitude) {
-						if ((lat[0] <= latitude && latitude <= lat[1]) || (lat[0] >= latitude && latitude >= lat[1])) intersect = intersect;
-						else if (lon[1] > longitude) intersect++;
-					if (lon[-1] > longitude) intersect++;//TODO: something's wrong here, I did something wrong. Should I load up all the vertices in the new array?
-					}
-				}
+				//the test for the line segment we're looking at right now
+				
 			}
-			if (intersect%2 == 0) found = i;
 		}
-		else if (geodata[i].geometry.type === "MultiPolygon"){//testing cases where the country is multiple polygons or has multiple discrete parts
-			var n = geodata[i].geometry.coordinates.length; //get length of coordinates array, which will now be the number of polygons in the array
-			var m;
-			for (m = 0; m < n; m++) {
-				var intersect = 0; //number of times a segment consisting of the user & the North Pole intersects with a segment consisting of two adjacent country vertices
-				var vertices = geodata[i].geometry.coordinates.length; //grabbing the number of vertices a country has
-				var j; //counting through coordinates array for current country
-				for (j = 0; j < vertices; j++) {
-					//boring stuff to separate out the latitudes and longitudes that we're gonna test this time around
-					if ((j+1) = vertices){//if the vertice we're testing is the same number in the list as the total amount of vertices, then it's the last one and we have to compare against the first vertice in the list
-						var vert1 = geodata[i].geometry.coordinates[m][j];//taking the last vertices
-						var vert2 = geodata[i].geometry.coordinates[0];//taking the first vertices
-					}
-					else {
-						var vert1 = geodata[i].geometry.coordinates[m][j];
-						var vert2 = geodata[i].geometry.coordinates[m][j+1];
-					}
-					var res = vert1.split();
-					var res1 = vert2.split();
-					var lat, lon;//variables to hold the two latitudes and longitudes for the test vertices
-					lat.push(res[1]);
-					lat.push(res1[1]);
-					lon.push(res[0]);
-					lon.push(res1[0]);
-					//finally, we can get to testing the specific segment formed by the vertices we're looking at right now
-					if ((lon[0] < longitude && longitude < lon[1]) || (lon[0] > longitude && longitude >  lon[1])) {
-						var t = (longitude - lon[1]) / (lon[0] - lon[1]);
-						var cy = t * lat[0] + (1-t) * lat[1];
-						if (latitude == cy) found = i;//point is on border
-						else if (latitude > cy) intersect++;
-					}
-					if (lon[0] == longitude && lat[0] <= latitude) {
-						if (lat[0] == latitude) found = i;//point is on border
-						if (lon[1] == longitude) {
-							if ((lat[0] <= latitude && latitude <= lat[1]) || (lat[0] >= latitude && latitude >= lat[1])) intersect = intersect;
-							else if (lon[1] > longitude) intersect++;
-						if (lon[-1] > longitude) intersect++;//TODO: something's wrong here, I did something wrong. Should I load up all the vertices in the new array?
-						}
-					}
-				}
+		else if (geodata[i].geometry.type = "MultiPolygon") {//if country is multiple polygons
+			var mp = geodata[i].geometry.coordinates.length;
+			for (var k = 0; k < mp; k++) {//looping through the polygons
+				
 				if (intersect%2 != 0) found = i;
 			}
 		}
+		if (found != null) break;//break loop if we've assigned an id to found
 	}
 	//Display Device Current Country
 		var locationLabel = Titanium.UI.createLabel({
