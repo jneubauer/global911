@@ -1,0 +1,4 @@
+// this is a generated file - DO NOT EDIT
+
+TI_MAP_OTHER_LDFLAGS=$(inherited) -weak_framework MapKit
+OTHER_LDFLAGS=$(inherited) $(TI_MAP_OTHER_LDFLAGS) 

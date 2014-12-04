@@ -1,0 +1,40 @@
+//
+//  Appcelerator Titanium Mobile
+//  WARNING: this is a generated file and should not be modified
+//
+
+#import <UIKit/UIKit.h>
+#define _QUOTEME(x) #x
+#define STRING(x) _QUOTEME(x)
+
+NSString * const TI_APPLICATION_DEPLOYTYPE = @"development";
+NSString * const TI_APPLICATION_ID = @"com.global911";
+NSString * const TI_APPLICATION_PUBLISHER = @"Jon Neubauer";
+NSString * const TI_APPLICATION_URL = @"http://jonneubauer.com";
+NSString * const TI_APPLICATION_NAME = @"02-030";
+NSString * const TI_APPLICATION_VERSION = @"0.1";
+NSString * const TI_APPLICATION_DESCRIPTION = @"Global911 is the must-have app for travelers. Global911 can pinpoint your location anywhere in the world, and provide you with the relevant local emergency services numbers.";
+NSString * const TI_APPLICATION_COPYRIGHT = @"2014 by Jon Neubauer";
+NSString * const TI_APPLICATION_GUID = @"597b2644-67d0-4075-8faa-13da1792f41a";
+BOOL const TI_APPLICATION_ANALYTICS = true;
+NSString * const TI_APPLICATION_BUILD_TYPE = @"";
+
+#ifdef TARGET_IPHONE_SIMULATOR
+NSString * const TI_APPLICATION_RESOURCE_DIR = @"";
+#endif
+
+int main(int argc, char *argv[]) {
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+
+#ifdef __LOG__ID__
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *logPath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s.log",STRING(__LOG__ID__)]];
+	freopen([logPath cStringUsingEncoding:NSUTF8StringEncoding],"w+",stderr);
+	fprintf(stderr,"[INFO] Application started\n");
+#endif
+
+	int retVal = UIApplicationMain(argc, argv, nil, @"TiApp");
+    [pool release];
+    return retVal;
+}
