@@ -152,7 +152,7 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 		font:{fontSize:18}
 	});
 	var numberLabel = Titanium.UI.createLabel({
-		text:"Your Local Emergency Number: " + geodata[found].number,
+		text:"Available Emergency Numbers: ",
 		top:"30%",
 		height:"5%",
 		width:"90%",
