@@ -15,6 +15,7 @@ var brandLabel = Titanium.UI.createLabel({
 	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
 	font:{fontSize:24}
 });
+win.add(brandLabel);
 
 //pulling in the secret sauce
 var fileName = 'geodata.json';
@@ -52,35 +53,32 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 	});
 	win.add(offlineLabel);
 	//gonna do a science and use the Jordan Curve Theorem here, you might want to shield your eyes
-	var pole = [90,0000,0.0000];//using the North Pole as the other end of the test segment. Sorry, Santa
+	var intersects = null;
 	var found = null;
-	for (var i = 0; i < geodata.length; i++) {//country
-		if (geodata[i].geometry.type = "Polygon") {//if country is single polygon
-			var intersects = 0;
-			for (var j = 0; j < geodata[i].geometry.coordinates[0].length; j++){//looping through the vertices
-				//setting up the specific points we're going to test
+	//verified block for looping through countries and deciding if polygon or multi polygon
+	for (var i = 0; i < geodata.length; i++){
+		if (geodata[i].geometry.type == "Polygon"){
+			//verified for testing country that is a single polygon
+			for (var j = 0; j < geodata[i].geometry.coordinates[0].length; j++) {
 				var x1, x2, x3, x4, y1, y2, y3, y4;
-				x1 = pole[0];
+				x1 = 90.0000;
+				y1 = 0.0000;
 				x2 = latitude;
-				if (j = geodata[i].geometry.coordinates[0].length) {
-					x3 = geodata[i].geometry.coordinates[0][j][1];
-					x4 = geodata[i].geometry.coordinates[0][0][1];
-				} else {
-					x3 = geodata[i].geometry.coordinates[0][j][1];
-					x4 = geodata[i].geometry.coordinates[0][j+1][1];
-				}
-				y1 = pole[1];
 				y2 = longitude;
-				if (j = geodata[i].geometry.coordinates[0].length) {
+				if ((j+1) == geodata[i].geometry.coordinates[0].length) {
+					x3 = geodata[i].geometry.coordinates[0][j][1];
 					y3 = geodata[i].geometry.coordinates[0][j][0];
+					x4 = geodata[i].geometry.coordinates[0][0][1];
 					y4 = geodata[i].geometry.coordinates[0][0][0];
 				} else {
+					x3 = geodata[i].geometry.coordinates[0][j][1];
 					y3 = geodata[i].geometry.coordinates[0][j][0];
+					x4 = geodata[i].geometry.coordinates[0][j+1][1];
 					y4 = geodata[i].geometry.coordinates[0][j+1][0];
 				}
-				//testing the line segment
-				var intersect = function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
- 
+				
+				function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
+				 
 				    var s1_x, s1_y, s2_x, s2_y;
 				    s1_x = x2 - x1;
 				    s1_y = y2 - y1;
@@ -91,43 +89,36 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 				    s = (-s1_y * (x1 - x3) + s1_x * (y1 - y3)) / (-s2_x * s1_y + s1_x * s2_y);
 				    t = ( s2_x * (y1 - y3) - s2_y * (x1 - x3)) / (-s2_x * s1_y + s1_x * s2_y);
 				 
-				    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) return 1;
-				 
-				    return 0; // No collision
+				    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) intersects++;
+				
 				};
-				if (intersect = 1) intersects++;
-			}
-			if (intersects%2 !=0) found = i;
-			if (found != null) break;//break loop if we've assigned an id to found
+				line_intersects(x1, y1, x2, y2, x3, y3, x4, y4);
+			};
+			if (intersects > 0 && intersects%2 != 0) found = i;
 		}
-		else if (geodata[i].geometry.type = "MultiPolygon") {//if country is multiple polygons
-			var mp = geodata[i].geometry.coordinates.length;
-			for (var k = 0; k < mp; k++) {//looping through the polygons
-				var intersects = 0;
-				for (var j = 0; j < geodata[i].geometry.coordinates[k][0].length; j++){//looping through the vertices
-					//setting up the specific points we're going to test
+		if (found != null) break;
+		if (geodata[i].geometry.type == "MultiPolygon"){
+			//verified for testing country that is a multi polygon
+			for (var k = 0; k < geodata[i].geometry.coordinates.length; k++) {
+				for (var l = 0; l < geodata[i].geometry.coordinates[k][0].length; l++) {
 					var x1, x2, x3, x4, y1, y2, y3, y4;
-					x1 = pole[0];
+					x1 = 90.0000;
+					y1 = 0.0000;
 					x2 = latitude;
-					if (j = geodata[i].geometry.coordinates[k][0].length) {
-						x3 = geodata[i].geometry.coordinates[k][0][j][1];
-						x4 = geodata[i].geometry.coordinates[k][0][0][1];
-					} else {
-						x3 = geodata[i].geometry.coordinates[k][0][j][1];
-						x4 = geodata[i].geometry.coordinates[k][0][j+1][1];
-					}
-					y1 = pole[1];
 					y2 = longitude;
-					if (j = geodata[i].geometry.coordinates[k][0].length) {
-						y3 = geodata[i].geometry.coordinates[k][0][j][0];
+					if ((l+1) == geodata[i].geometry.coordinates[k][0].length) {
+						x3 = geodata[i].geometry.coordinates[k][0][l][1];
+						y3 = geodata[i].geometry.coordinates[k][0][l][0];
+						x4 = geodata[i].geometry.coordinates[k][0][0][1];
 						y4 = geodata[i].geometry.coordinates[k][0][0][0];
 					} else {
-						y3 = geodata[i].geometry.coordinates[k][0][j][0];
-						y4 = geodata[i].geometry.coordinates[k][0][j+1][0];
+						x3 = geodata[i].geometry.coordinates[k][0][l][1];
+						y3 = geodata[i].geometry.coordinates[k][0][l][0];
+						x4 = geodata[i].geometry.coordinates[k][0][l+1][1];
+						y4 = geodata[i].geometry.coordinates[k][0][l+1][0];
 					}
-					//testing the line segment
-					var intersect = function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
-	 
+					function line_intersects(x1, y1, x2, y2, x3, y3, x4, y4) {
+				 
 					    var s1_x, s1_y, s2_x, s2_y;
 					    s1_x = x2 - x1;
 					    s1_y = y2 - y1;
@@ -138,28 +129,52 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 					    s = (-s1_y * (x1 - x3) + s1_x * (y1 - y3)) / (-s2_x * s1_y + s1_x * s2_y);
 					    t = ( s2_x * (y1 - y3) - s2_y * (x1 - x3)) / (-s2_x * s1_y + s1_x * s2_y);
 					 
-					    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) return 1;
-					 
-					    return 0; // No collision
+					    if (s >= 0 && s <= 1 && t >= 0 && t <= 1) intersects++;
+					
 					};
-					if (intersect = 1) intersects++;
+					line_intersects(x1, y1, x2, y2, x3, y3, x4, y4);
 				}
-				if (intersects%2 !=0) found = i;
-				if (found != null) break;//break loop if we've assigned an id to found
-			}
+				if (intersects > 0 && intersects%2 != 0) {
+					found = i;
+					break;
+				}
+			};
 		}
-		if (found != null) break;//break loop if we've assigned an id to found
+		if (found != null) break;
 	}
+	
 	//Display Device Current Country
-		var locationLabel = Titanium.UI.createLabel({
-			text:geodata[1].geometry.coordinates,
-			top:"10%",
-			height:"90%",
-			width:"90%",
-			font:{fontSize:18}
-		});
-		win.add(locationLabel);
-}
+	var locationLabel = Titanium.UI.createLabel({
+		text:("Your Location: " + geodata[found].name),
+		top:"10%",
+		height:"5%",
+		width:"90%",
+		font:{fontSize:18}
+	});
+	var numberLabel = Titanium.UI.createLabel({
+		text:"Your Local Emergency Number: " + geodata[found].number,
+		top:"30%",
+		height:"5%",
+		width:"90%",
+		font:{fontSize:18}
+	});
+	var numberDial = Titanium.UI.createButton({
+		title:"DIAL " + geodata[found].number,
+		width:"32%",
+		height:"10%",
+		top:"36%",
+		borderRadius: "10",
+		borderColor: "blue",
+	});
+	//sends user to dialer with emergency number pre-populated when numberDial is clicked
+	numberDial.addEventListener("click", function(e){
+		{Titanium.Platform.openURL("tel:"+ geodata[found].number);}
+	});
+
+	win.add(locationLabel);
+	win.add(numberLabel);
+	win.add(numberDial);
+	}
 else {//online reverse  geocoding
 	var country_code;
 	var countryID;
@@ -235,7 +250,7 @@ var noGPSLabel = Titanium.UI.createLabel({
 });
 
 //displaying stuff
-win.add(brandLabel);
+
 if (latitude == undefined){
 	win.add(noGPSLabel);
 }
