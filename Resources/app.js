@@ -10,12 +10,12 @@ var brandLabel = Titanium.UI.createLabel({
 	color: "white",
 	backgroundColor:"#e0483e",
 	top:0,
-	height:"10%",
+	height:80,
 	width:"100%",
 	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
 	font:{fontSize:24}
 });
-win.add(brandLabel);
+if (Ti.Platform.osname !== 'android') win.add(brandLabel);
 
 //pulling in the secret sauce
 var fileName = 'geodata.json';
@@ -42,7 +42,8 @@ Titanium.Geolocation.getCurrentPosition(function(e) {
     };
 });
 
-if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline reverse geocoding
+if (latitude !== undefined) {
+	if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline reverse geocoding
 	//label with offline notice TODO: should i keep this?
 	var offlineLabel = Titanium.UI.createLabel({
 		text:"Working Offline",
@@ -146,34 +147,88 @@ if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline re
 	//Display Device Current Country
 	var locationLabel = Titanium.UI.createLabel({
 		text:("Your Location: " + geodata[found].name),
-		top:"10%",
-		height:"5%",
+		top:90,
+		height:60,
 		width:"90%",
 		font:{fontSize:18}
 	});
 	var numberLabel = Titanium.UI.createLabel({
 		text:"Available Emergency Numbers: ",
-		top:"30%",
-		height:"5%",
+		top:160,
+		height:20,
 		width:"90%",
 		font:{fontSize:18}
 	});
-	var numberDial = Titanium.UI.createButton({
-		title:"DIAL " + geodata[found].number,
-		width:"32%",
-		height:"10%",
-		top:"36%",
-		borderRadius: "10",
-		borderColor: "blue",
+	var policeButton = Titanium.UI.createButton({
+		title: "Police: Dial " + geodata[found].number[0],
+		top:200,
+		height:40, 
+		width:"90%",
+		font:{fontSize:18}
 	});
+	var ambulanceButton = Titanium.UI.createButton({
+		title: "Ambulance: Dial " + geodata[found].number[1],
+		top:260,
+		height:40, 
+		width:"90%",
+		font:{fontSize:18}
+	});
+	var fireButton = Titanium.UI.createButton({
+		title: "Fire: Dial " + geodata[found].number[2],
+		top:320,
+		height:40, 
+		width:"90%",
+		font:{fontSize:18}
+	});
+	var noOptions = Titanium.UI.createLabel({
+		text: "There are no known emergency numbers for the country you are in.",
+		top:200,
+		height:40, 
+		width:"90%",
+		font:{fontSize:18}
+	});
+	var singleNumber = Titanium.UI.createLabel({
+		text: "Dial " + geodata[found].number,
+		top:200,
+		height:40, 
+		width:"90%",
+		font:{fontSize:18}
+	});
+	
+	if (geodata[found].number.length == 1) {
+		win.add(singleNumber);
+		options++;
+	}
+	else {
+		for (var p = 0; p < geodata[found].number.length; p++){
+			if (p == 0 && geodata[found].number[p] != "") {
+				win.add(policButton);
+				options++;
+			}
+			if (p == 1 && geodata[found].number[p] != "") {
+				win.add(ambulanceButton);
+				options++;
+			}
+			if (p == 2 && geodata[found].number[p] != "") {
+				win.add(fireButton);
+				options++;
+			}
+		}
+	}
+	if (options == 0) win.add(noOptions);
 	//sends user to dialer with emergency number pre-populated when numberDial is clicked
-	numberDial.addEventListener("click", function(e){
-		{Titanium.Platform.openURL("tel:"+ geodata[found].number);}
+	policeButton.addEventListener("click", function(e){
+		{Titanium.Platform.openURL("tel:"+ geodata[found].number[0]);}
+	});
+	ambulanceButton.addEventListener("click", function(e){
+		{Titanium.Platform.openURL("tel:"+ geodata[found].number[1]);}
+	});
+	fireButton.addEventListener("click", function(e){
+		{Titanium.Platform.openURL("tel:"+ geodata[found].number[2]);}
 	});
 
 	win.add(locationLabel);
 	win.add(numberLabel);
-	win.add(numberDial);
 	}
 else {//online reverse  geocoding
 	var country_code;
@@ -216,35 +271,91 @@ else {//online reverse  geocoding
 				font:{fontSize:18}
 			});
 			var numberLabel = Titanium.UI.createLabel({
-				text:"Your Local Emergency Number: " + geodata[countryID].number,
+				text:"Available Emergency Numbers",
 				top:"30%",
 				height:"5%",
 				width:"90%",
 				font:{fontSize:18}
 			});
-			var numberDial = Titanium.UI.createButton({
-				title:"DIAL " + geodata[countryID].number,
-				width:"32%",
-				height:"10%",
-				top:"36%",
-				borderRadius: "10",
-				borderColor: "blue",
+			var policeButton = Titanium.UI.createButton({
+				title: "Police: Dial " + geodata[countryID].number[0],
+				top:200,
+				height:40, 
+				width:"90%",
+				font:{fontSize:18}
 			});
+			var ambulanceButton = Titanium.UI.createButton({
+				title: "Ambulance: Dial " + geodata[countryID].number[1],
+				top:260,
+				height:40, 
+				width:"90%",
+				font:{fontSize:18}
+			});
+			var fireButton = Titanium.UI.createButton({
+				title: "Fire: Dial " + geodata[countryID].number[2],
+				top:320,
+				height:40, 
+				width:"90%",
+				font:{fontSize:18}
+			});
+			var noOptions = Titanium.UI.createLabel({
+				text: "There are no known emergency numbers for the country you are in.",
+				top:200,
+				height:40, 
+				width:"90%",
+				font:{fontSize:18}
+			});
+			var singleNumber = Titanium.UI.createLabel({
+				text: "Dial " + geodata[countryID].number,
+				top:200,
+				height:40, 
+				width:"90%",
+				font:{fontSize:18}
+			});
+			
+			if (geodata[countryID].number.length == 1) {
+				win.add(singleNumber);
+				options++;
+			}
+			else {
+				for (var p = 0; p < geodata[countryID].number.length; p++){
+					if (p == 0 && geodata[countryID].number[p] != "") {
+						win.add(policButton);
+						options++;
+					}
+					if (p == 1 && geodata[countryID].number[p] != "") {
+						win.add(ambulanceButton);
+						options++;
+					}
+					if (p == 2 && geodata[countryID].number[p] != "") {
+						win.add(fireButton);
+						options++;
+					}
+				}
+			}
+			if (options == 0) win.add(noOptions);
 			//sends user to dialer with emergency number pre-populated when numberDial is clicked
-			numberDial.addEventListener("click", function(e){
-				{Titanium.Platform.openURL("tel:"+geodata[countryID].number);}
+			policeButton.addEventListener("click", function(e){
+				{Titanium.Platform.openURL("tel:"+ geodata[countryID].number[0]);}
+			});
+			ambulanceButton.addEventListener("click", function(e){
+				{Titanium.Platform.openURL("tel:"+ geodata[countryID].number[1]);}
+			});
+			fireButton.addEventListener("click", function(e){
+				{Titanium.Platform.openURL("tel:"+ geodata[countryID].number[2]);}
 			});
 			win.add(numberLabel);
 			win.add(locationLabel);
-			win.add(numberDial);
 	});
 }// end of else
+	
+}
 
 //Display Notice if No GPS
 var noGPSLabel = Titanium.UI.createLabel({
 	text:("Global911 cannot retrieve your GPS location"),
-	top:"10%",
-	height:"10%",
+	top:90,
+	height:60,
 	width:"90%",
 	font:{fontSize:18}
 });
