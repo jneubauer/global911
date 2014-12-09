@@ -46,9 +46,9 @@ if (latitude !== undefined) {
 	if (Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {//offline reverse geocoding
 	//label with offline notice TODO: should i keep this?
 	var offlineLabel = Titanium.UI.createLabel({
-		text:"Working Offline",
+		text:"Global911 is Working Offline",
 		bottom:0,
-		height:"5%",
+		height:20,
 		width:"90%",
 		font:{fontSize:18}
 	});
@@ -161,6 +161,8 @@ if (latitude !== undefined) {
 	});
 	var policeButton = Titanium.UI.createButton({
 		title: "Police: Dial " + geodata[found].number[0],
+		borderColor: "blue",
+		borderRadius: 15,
 		top:200,
 		height:40, 
 		width:"90%",
@@ -168,6 +170,8 @@ if (latitude !== undefined) {
 	});
 	var ambulanceButton = Titanium.UI.createButton({
 		title: "Ambulance: Dial " + geodata[found].number[1],
+		borderColor: "blue",
+		borderRadius: 15,
 		top:260,
 		height:40, 
 		width:"90%",
@@ -175,6 +179,8 @@ if (latitude !== undefined) {
 	});
 	var fireButton = Titanium.UI.createButton({
 		title: "Fire: Dial " + geodata[found].number[2],
+		borderColor: "blue",
+		borderRadius: 15,
 		top:320,
 		height:40, 
 		width:"90%",
@@ -187,13 +193,17 @@ if (latitude !== undefined) {
 		width:"90%",
 		font:{fontSize:18}
 	});
-	var singleNumber = Titanium.UI.createLabel({
-		text: "Dial " + geodata[found].number,
+	var singleNumber = Titanium.UI.createButton({
+		title: "Dial " + geodata[found].number,
+		borderColor: "blue",
+		borderRadius: 15,
 		top:200,
 		height:40, 
 		width:"90%",
 		font:{fontSize:18}
 	});
+	
+	var options = 0;
 	
 	if (geodata[found].number.length == 1) {
 		win.add(singleNumber);
@@ -202,7 +212,7 @@ if (latitude !== undefined) {
 	else {
 		for (var p = 0; p < geodata[found].number.length; p++){
 			if (p == 0 && geodata[found].number[p] != "") {
-				win.add(policButton);
+				win.add(policeButton);
 				options++;
 			}
 			if (p == 1 && geodata[found].number[p] != "") {
@@ -225,6 +235,9 @@ if (latitude !== undefined) {
 	});
 	fireButton.addEventListener("click", function(e){
 		{Titanium.Platform.openURL("tel:"+ geodata[found].number[2]);}
+	});
+	singleNumber.addEventListener("click", function(e){
+		{Titanium.Platform.openURL("tel:"+ geodata[found].number);}
 	});
 
 	win.add(locationLabel);
@@ -279,6 +292,8 @@ else {//online reverse  geocoding
 			});
 			var policeButton = Titanium.UI.createButton({
 				title: "Police: Dial " + geodata[countryID].number[0],
+				borderColor: "blue",
+				borderRadius: 15,
 				top:200,
 				height:40, 
 				width:"90%",
@@ -286,6 +301,8 @@ else {//online reverse  geocoding
 			});
 			var ambulanceButton = Titanium.UI.createButton({
 				title: "Ambulance: Dial " + geodata[countryID].number[1],
+				borderColor: "blue",
+				borderRadius: 15,	
 				top:260,
 				height:40, 
 				width:"90%",
@@ -293,6 +310,8 @@ else {//online reverse  geocoding
 			});
 			var fireButton = Titanium.UI.createButton({
 				title: "Fire: Dial " + geodata[countryID].number[2],
+				borderColor: "blue",
+				borderRadius: 15,
 				top:320,
 				height:40, 
 				width:"90%",
@@ -307,11 +326,15 @@ else {//online reverse  geocoding
 			});
 			var singleNumber = Titanium.UI.createLabel({
 				text: "Dial " + geodata[countryID].number,
+				borderColor: "blue",
+				borderRadius: 15,
 				top:200,
 				height:40, 
 				width:"90%",
 				font:{fontSize:18}
 			});
+			
+			var options = 0;
 			
 			if (geodata[countryID].number.length == 1) {
 				win.add(singleNumber);
@@ -320,7 +343,7 @@ else {//online reverse  geocoding
 			else {
 				for (var p = 0; p < geodata[countryID].number.length; p++){
 					if (p == 0 && geodata[countryID].number[p] != "") {
-						win.add(policButton);
+						win.add(policeButton);
 						options++;
 					}
 					if (p == 1 && geodata[countryID].number[p] != "") {
@@ -343,6 +366,9 @@ else {//online reverse  geocoding
 			});
 			fireButton.addEventListener("click", function(e){
 				{Titanium.Platform.openURL("tel:"+ geodata[countryID].number[2]);}
+			});
+			singleNumber.addEventListener("click", function(e){
+				{Titanium.Platform.openURL("tel:"+ geodata[countryID].number);}
 			});
 			win.add(numberLabel);
 			win.add(locationLabel);
