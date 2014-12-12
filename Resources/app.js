@@ -206,7 +206,7 @@ if (latitude !== undefined) {
 	var options = 0;
 	
 	if (geodata[found].number.length == 1) {
-		win.add(singleNumber);
+		if (geodata[found].number[0] != "") win.add(singleNumber);
 		options++;
 	}
 	else {
@@ -337,8 +337,10 @@ else {//online reverse  geocoding
 			var options = 0;
 			
 			if (geodata[countryID].number.length == 1) {
-				win.add(singleNumber);
-				options++;
+				if (geodata[found].number[0] != "") {
+					win.add(singleNumber);
+					options++;
+				}
 			}
 			else {
 				for (var p = 0; p < geodata[countryID].number.length; p++){
