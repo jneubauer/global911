@@ -1,21 +1,25 @@
 var win = Titanium.UI.createWindow({
 	title:"Global911",
-	backgroundColor:"#FFF",
+	backgroundColor:"#e6e8e6",
 	exitOnClose:true
 });
 
 //top Brand Label
 var brandLabel = Titanium.UI.createLabel({
-	text:"Global911",
-	color: "white",
-	backgroundColor:"#e0483e",
+	backgroundColor:"#102E4A",
 	top:0,
 	height:80,
 	width:"100%",
-	textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-	font:{fontSize:24}
 });
-if (Ti.Platform.osname !== 'android') win.add(brandLabel);
+var brandImg = Titanium.UI.createImageView({
+	image:"global911-mini.png",
+	top:25,
+	height:45,
+});
+if (Ti.Platform.osname !== 'android') {
+	win.add(brandLabel);
+	win.add(brandImg);
+}
 
 //pulling in the secret sauce
 var fileName = 'geodata.json';
@@ -47,10 +51,13 @@ if (latitude !== undefined) {
 	//label with offline notice TODO: should i keep this?
 	var offlineLabel = Titanium.UI.createLabel({
 		text:"Global911 is Working Offline",
+		backgroundColor:"#102E4A",
+		color: "#fff",
 		bottom:0,
-		height:20,
-		width:"90%",
-		font:{fontSize:18}
+		height:'auto',
+		padding: 15,
+		width:"100%",
+		font:{fontSize:14}
 	});
 	win.add(offlineLabel);
 	//gonna do a science and use the Jordan Curve Theorem here, you might want to shield your eyes
@@ -147,6 +154,7 @@ if (latitude !== undefined) {
 	//Display Device Current Country
 	var locationLabel = Titanium.UI.createLabel({
 		text:("Your Location: " + geodata[found].name),
+		color: "#272727",
 		top:90,
 		height:60,
 		width:"90%",
@@ -154,6 +162,7 @@ if (latitude !== undefined) {
 	});
 	var numberLabel = Titanium.UI.createLabel({
 		text:"Available Emergency Numbers: ",
+		color: "#272727",
 		top:160,
 		height:20,
 		width:"90%",
@@ -161,33 +170,40 @@ if (latitude !== undefined) {
 	});
 	var policeButton = Titanium.UI.createButton({
 		title: "Police: Dial " + geodata[found].number[0],
-		borderColor: "blue",
-		borderRadius: 15,
+		backgroundColor: "#2aabe1",
+		color: "#fff",
+		borderRadius: 8,
 		top:200,
-		height:40, 
-		width:"90%",
-		font:{fontSize:18}
+		height:'auto', 
+		width:"60%",
+		padding: 15,
+		font:{fontSize:18, fontWeight: "bold"}
 	});
 	var ambulanceButton = Titanium.UI.createButton({
 		title: "Ambulance: Dial " + geodata[found].number[1],
-		borderColor: "blue",
-		borderRadius: 15,
+		backgroundColor: "#2aabe1",
+		color: "#fff",
+		borderRadius: 8,
 		top:260,
-		height:40, 
-		width:"90%",
-		font:{fontSize:18}
+		height:'auto', 
+		width:"60%",
+		padding: 15,
+		font:{fontSize:18, fontWeight: "bold"}
 	});
 	var fireButton = Titanium.UI.createButton({
 		title: "Fire: Dial " + geodata[found].number[2],
-		borderColor: "blue",
-		borderRadius: 15,
+		backgroundColor: "#2aabe1",
+		color: "#fff",
+		borderRadius: 8,
 		top:320,
-		height:40, 
-		width:"90%",
-		font:{fontSize:18}
+		height:'auto',
+		padding: 15,
+		width:'60%',
+		font:{fontSize:18, fontWeight: "bold"}
 	});
 	var noOptions = Titanium.UI.createLabel({
 		text: "There are no known emergency numbers for the country you are in.",
+		color: "#272727",
 		top:200,
 		height:40, 
 		width:"90%",
@@ -195,12 +211,14 @@ if (latitude !== undefined) {
 	});
 	var singleNumber = Titanium.UI.createButton({
 		title: "Dial " + geodata[found].number,
-		borderColor: "blue",
-		borderRadius: 15,
+		backgroundColor: "#2aabe1",
+		color: "#fff",
+		borderRadius: 8,
 		top:200,
-		height:40, 
-		width:"90%",
-		font:{fontSize:18}
+		height:'auto', 
+		width:"60%",
+		padding: 15,
+		font:{fontSize:18, fontWeight: "bold"}
 	});
 	
 	var options = 0;
@@ -277,48 +295,57 @@ else {//online reverse  geocoding
 		//country_code and country, and countryID works here
 		//Display Device Current Country
 			var locationLabel = Titanium.UI.createLabel({
-				text:("Your Location: " + country /*latitude + ", " + longitude*/),
-				top:"10%",
-				height:"5%",
+				text:("Your Location: " + country),
+				color: "#272727",
+				top:90,
+				height:60,
 				width:"90%",
 				font:{fontSize:18}
 			});
 			var numberLabel = Titanium.UI.createLabel({
 				text:"Available Emergency Numbers",
-				top:"30%",
-				height:"5%",
+				color: "#272727",
+				top:160,
+				height:20,
 				width:"90%",
 				font:{fontSize:18}
 			});
 			var policeButton = Titanium.UI.createButton({
 				title: "Police: Dial " + geodata[countryID].number[0],
-				borderColor: "blue",
-				borderRadius: 15,
+				backgroundColor: "#2aabe1",
+				color: "#fff",
+				borderRadius: 8,
 				top:200,
-				height:40, 
-				width:"90%",
-				font:{fontSize:18}
+				height:'auto', 
+				width:"60%",
+				padding: 15,
+				font:{fontSize:18, fontWeight: "bold"}
 			});
 			var ambulanceButton = Titanium.UI.createButton({
 				title: "Ambulance: Dial " + geodata[countryID].number[1],
-				borderColor: "blue",
-				borderRadius: 15,	
+				backgroundColor: "#2aabe1",
+				color: "#fff",
+				borderRadius: 8,
 				top:260,
-				height:40, 
-				width:"90%",
-				font:{fontSize:18}
+				height:'auto', 
+				width:"60%",
+				padding: 15,
+				font:{fontSize:18, fontWeight: "bold"}
 			});
 			var fireButton = Titanium.UI.createButton({
 				title: "Fire: Dial " + geodata[countryID].number[2],
-				borderColor: "blue",
-				borderRadius: 15,
+				backgroundColor: "#2aabe1",
+				color: "#fff",
+				borderRadius: 8,
 				top:320,
-				height:40, 
-				width:"90%",
-				font:{fontSize:18}
+				height:'auto',
+				padding: 15,
+				width:'60%',
+				font:{fontSize:18, fontWeight: "bold"}
 			});
 			var noOptions = Titanium.UI.createLabel({
 				text: "There are no known emergency numbers for the country you are in.",
+				color: "#272727",
 				top:200,
 				height:40, 
 				width:"90%",
@@ -326,18 +353,20 @@ else {//online reverse  geocoding
 			});
 			var singleNumber = Titanium.UI.createLabel({
 				text: "Dial " + geodata[countryID].number,
-				borderColor: "blue",
-				borderRadius: 15,
+				backgroundColor: "#2aabe1",
+				color: "#fff",
+				borderRadius: 8,
 				top:200,
-				height:40, 
-				width:"90%",
-				font:{fontSize:18}
+				height:'auto', 
+				width:"60%",
+				padding: 15,
+				font:{fontSize:18, fontWeight: "bold"}
 			});
 			
 			var options = 0;
 			
 			if (geodata[countryID].number.length == 1) {
-				if (geodata[found].number[0] != "") {
+				if (geodata[countryID].number[0] != "") {
 					win.add(singleNumber);
 					options++;
 				}
@@ -382,6 +411,7 @@ else {//online reverse  geocoding
 //Display Notice if No GPS
 var noGPSLabel = Titanium.UI.createLabel({
 	text:("Global911 cannot retrieve your GPS location"),
+	color: "#272727",
 	top:90,
 	height:60,
 	width:"90%",
