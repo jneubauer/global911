@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>com.global911</id>
     <name>Global911</name>
-    <version>0.1</version>
+    <version>1.0</version>
     <publisher>Jon Neubauer</publisher>
     <url>http://jonneubauer.com</url>
     <description>Global911 is the must-have app for travelers. Global911 can pinpoint your location anywhere in the world, and provide you with the relevant local emergency services numbers.</description>
@@ -16,7 +16,7 @@
     <ios>
         <plist>
             <dict>
-            	 <key>NSLocationAlwaysUsageDescription</key>
+                <key>NSLocationAlwaysUsageDescription</key>
                 <string>
                     Specify the reason for accessing the user's location information.
                     This appears in the alert dialog when asking the user for permission to
@@ -44,7 +44,6 @@
             </dict>
         </plist>
     </ios>
-    <android xmlns:android="http://schemas.android.com/apk/res/android"/>
     <mobileweb>
         <precache/>
         <splash>

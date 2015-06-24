@@ -16,10 +16,13 @@ var brandImg = Titanium.UI.createImageView({
 	top:25,
 	height:45,
 });
+
 if (Ti.Platform.osname !== 'android') {
 	win.add(brandLabel);
 	win.add(brandImg);
+	var height = 90;
 }
+else var height = 10;
 
 //pulling in the secret sauce
 var fileName = 'geodata.json';
@@ -155,7 +158,7 @@ if (latitude !== undefined) {
 	var locationLabel = Titanium.UI.createLabel({
 		text:("Your Location: " + geodata[found].name),
 		color: "#272727",
-		top:90,
+		top:height,
 		height:60,
 		width:"90%",
 		font:{fontSize:18}
@@ -163,7 +166,7 @@ if (latitude !== undefined) {
 	var numberLabel = Titanium.UI.createLabel({
 		text:"Available Emergency Numbers: ",
 		color: "#272727",
-		top:160,
+		top:height + 70,
 		height:20,
 		width:"90%",
 		font:{fontSize:18}
@@ -173,7 +176,7 @@ if (latitude !== undefined) {
 		backgroundColor: "#2aabe1",
 		color: "#fff",
 		borderRadius: 8,
-		top:200,
+		top:height + 110,
 		height:'auto', 
 		width:"60%",
 		padding: 15,
@@ -184,7 +187,7 @@ if (latitude !== undefined) {
 		backgroundColor: "#2aabe1",
 		color: "#fff",
 		borderRadius: 8,
-		top:260,
+		top:height + 170,
 		height:'auto', 
 		width:"60%",
 		padding: 15,
@@ -195,7 +198,7 @@ if (latitude !== undefined) {
 		backgroundColor: "#2aabe1",
 		color: "#fff",
 		borderRadius: 8,
-		top:320,
+		top:height + 230,
 		height:'auto',
 		padding: 15,
 		width:'60%',
@@ -204,7 +207,7 @@ if (latitude !== undefined) {
 	var noOptions = Titanium.UI.createLabel({
 		text: "There are no known emergency numbers for the country you are in.",
 		color: "#272727",
-		top:200,
+		top:height + 110,
 		height:40, 
 		width:"90%",
 		font:{fontSize:18}
@@ -214,8 +217,8 @@ if (latitude !== undefined) {
 		backgroundColor: "#2aabe1",
 		color: "#fff",
 		borderRadius: 8,
-		top:200,
-		height:'auto', 
+		top:height + 110,
+		height:40, 
 		width:"60%",
 		padding: 15,
 		font:{fontSize:18, fontWeight: "bold"}
@@ -297,7 +300,7 @@ else {//online reverse  geocoding
 			var locationLabel = Titanium.UI.createLabel({
 				text:("Your Location: " + country),
 				color: "#272727",
-				top:90,
+				top:height,
 				height:60,
 				width:"90%",
 				font:{fontSize:18}
@@ -305,7 +308,7 @@ else {//online reverse  geocoding
 			var numberLabel = Titanium.UI.createLabel({
 				text:"Available Emergency Numbers",
 				color: "#272727",
-				top:160,
+				top:height + 70,
 				height:20,
 				width:"90%",
 				font:{fontSize:18}
@@ -315,7 +318,7 @@ else {//online reverse  geocoding
 				backgroundColor: "#2aabe1",
 				color: "#fff",
 				borderRadius: 8,
-				top:200,
+				top:height + 110,
 				height:'auto', 
 				width:"60%",
 				padding: 15,
@@ -326,7 +329,7 @@ else {//online reverse  geocoding
 				backgroundColor: "#2aabe1",
 				color: "#fff",
 				borderRadius: 8,
-				top:260,
+				top:height + 170,
 				height:'auto', 
 				width:"60%",
 				padding: 15,
@@ -337,7 +340,7 @@ else {//online reverse  geocoding
 				backgroundColor: "#2aabe1",
 				color: "#fff",
 				borderRadius: 8,
-				top:320,
+				top:height + 230,
 				height:'auto',
 				padding: 15,
 				width:'60%',
@@ -346,7 +349,7 @@ else {//online reverse  geocoding
 			var noOptions = Titanium.UI.createLabel({
 				text: "There are no known emergency numbers for the country you are in.",
 				color: "#272727",
-				top:200,
+				top:height + 110,
 				height:40, 
 				width:"90%",
 				font:{fontSize:18}
@@ -356,10 +359,11 @@ else {//online reverse  geocoding
 				backgroundColor: "#2aabe1",
 				color: "#fff",
 				borderRadius: 8,
-				top:200,
+				top:height + 110,
 				height:'auto', 
 				width:"60%",
 				padding: 15,
+				textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
 				font:{fontSize:18, fontWeight: "bold"}
 			});
 			
@@ -412,7 +416,7 @@ else {//online reverse  geocoding
 var noGPSLabel = Titanium.UI.createLabel({
 	text:("Global911 cannot retrieve your GPS location"),
 	color: "#272727",
-	top:90,
+	top:height,
 	height:60,
 	width:"90%",
 	font:{fontSize:18}

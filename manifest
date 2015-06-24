@@ -1,8 +1,8 @@
-#appname: 02-030
-#publisher: production
-#url: http://
-#image: appicon.png
-#appid: com.jonn
-#desc: undefined
-#type: ipad
-#guid: 597b2644-67d0-4075-8faa-13da1792f41a
+#appname:02-030
+#publisher:Jon Neubauer
+#url:http://jonneubauer.com
+#image:appicon.png
+#appid:com.global911
+#desc:Global911 is the must-have app for travelers. Global911 can pinpoint your location anywhere in the world, and provide you with the relevant local emergency services numbers.
+#type:ipad
+#guid:597b2644-67d0-4075-8faa-13da1792f41a
